@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>[[${pageTitle}]]</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container-fluid">
+  <div class="text-center" align="center"><h2>Hesap Özeti</h2></div>
+  <div>
+    <form  method="post" th:object="${account}"
+           style="max-width: 500px;border: 1px; margin: 0 auto">
+      <input type="hidden" th:field="*{userId}">
+      <h4>Merhaba Sn.<label th:text="*{name}"></label> <label th:text="*{surname}"></label></h4>
+    </form>
+    <form  method="post" th:object="${balance}"
+           style="max-width: 500px;border: 1px; margin: 0 auto">
+      <input type="hidden" th:field="*{user_id}">
+      <h4>Hesabınızda şuan <label th:text="*{bakiye}"></label> TL bulunmaktadır</h4>
+      <h4>Lütfen yapmak istediğiniz işlemi seçin.</h4>
+    </form>
+  </div>
+<div>
+  <form th:action="@{/account/deposit/{user_id}(user_id=${balance.user_id})}" method="post" th:object="${balance}"
+        style="max-width: 500px;border: 1px; margin: 0 auto">
+    <button style="text-align:left;" type="submit" class="btn btn-primary m-2" >Deposit</button>
+  </form>
+
+  <form th:action="@{/account/withdraw/{user_id}(user_id=${balance.user_id})}" method="post" th:object="${balance}"
+        style="max-width: 500px;border: 1px; margin: 0 auto">
+    <p><button type="submit" class="btn btn-secondary m-2" >Withdraw</button></p>
+    <button type="button" class="btn btn-secondary m-2" onclick="cancelForm()" >Cancel</button>
+  </form>
+
+</div>
+
+
+
+
+  <head>
+    <style>
+      body {
+        margin: 0;
+        padding-top: 100px;
+        background-color: honeydew;
+      }
+
+    </style>
+  </head>
+
+  <script type="text/javascript">
+    function cancelForm(){
+      window.location= "[[@{/accounts}]]";
+    }
+
+  </script>
+</div>
+</body>
+</html>

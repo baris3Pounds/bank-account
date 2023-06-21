@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${pageTitle}]]</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container-fluid">
+  <div  align="center" style="color: white" class="text-center"><h2>Create New Account</h2></div>
+  <div align="center" style="background-color: white">
+    <form th:action="@{/account/create}" method="post" th:object="${account}"
+          style="max-width: 500px;border: 1px; margin: 0 auto">
+      <input type="hidden" th:field="*{userId}" >
+      <div class="border border-secondary rounded p-3">
+        <div class="form-group row">
+          <p>
+<br>
+          </p>
+          <div class="col-sm-8">
+            <p>
+              <label class="col-sm-4 col-form-label">Name </label><input type="text" th:field="*{name}" class="form-control" required maxlength="20" />
+            </p>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-8">
+            <p>
+            <label class="col-sm-4 col-form-label">Surname </label><input type="text" th:field="*{surname}" class="form-control" required maxlength="20" />
+            </p>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-8">
+            <p>
+            <label class="col-sm-4 col-form-label">Phone Number </label><input type="tel" th:field="*{telephone}" class="form-control" required minlength="11" maxlength="11" />
+            </p>
+          </div>
+        </div>      <div class="form-group row">
+        <div class="col-sm-8">
+          <p>
+          <label class="col-sm-4 col-form-label">E-mail </label><input type="email" th:field="*{email}" class="form-control" required min="0" />
+          </p>
+        </div>
+        <button type="submit" class="btn btn-primary m-2">Save</button>
+        <button type="button" class="btn btn-secondary m-2" onclick="cancelForm()">Cancel</button>
+        <p>
+          <br>
+        </p>
+      </div>
+      </div>
+    </form>
+  </div>
+  </div>
+
+
+  <head>
+    <style>
+
+      * {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+
+      input {
+        padding: 3px;
+        box-shadow: 3px 3px 5px grey;
+        font-size: 14px;
+        font-weight: 600;
+        width: 300px;
+      }
+
+      label {
+        color: #B4886B;
+        font-weight: bold;
+        width: 130px;
+        float: left;
+
+      }
+      label:after { content: ": " }
+
+
+      body {
+        margin: 0;
+        padding-top: 100px;
+        background-color: #363958;
+      }
+
+      button {
+        padding: 5px;
+        border: 1px solid gray;
+        background-color:#B4886B;
+        border-radius: 5px;
+        font: inherit;
+      }
+
+    </style>
+  </head>
+
+<script type="text/javascript">
+  function cancelForm(){
+    window.location= "[[@{/accounts}]]";
+  }
+</script>
+</body>
+</html>
