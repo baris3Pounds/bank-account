@@ -2,6 +2,7 @@ package com.springboot.caseStudy.account;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
@@ -12,7 +13,7 @@ public class Balance {
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "account_seq")
     private Integer user_id;
     @Column(length = 20, nullable=false)
-    private Integer bakiye;
+    private BigDecimal bakiye;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -28,7 +29,7 @@ public class Balance {
         this.account = account;
     }
 
-    public Balance(Integer bakiye) {
+    public Balance(BigDecimal bakiye) {
         this.bakiye = bakiye;
     }
 
@@ -46,11 +47,11 @@ public class Balance {
         return null;
     }
 
-    public Integer getBakiye() {
+    public BigDecimal getBakiye() {
         return bakiye;
     }
 
-    public void setBakiye(Integer bakiye) {
+    public void setBakiye(BigDecimal bakiye) {
         this.bakiye = bakiye;
     }
 

@@ -1,16 +1,16 @@
 package com.springboot.caseStudy.balance;
 
-        import com.springboot.caseStudy.account.Balance;
-        import com.springboot.caseStudy.repositories.BalanceRepository;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.stereotype.Service;
-
-        import java.util.List;
-        import java.util.Optional;
+import com.springboot.caseStudy.account.Balance;
+import com.springboot.caseStudy.exceptions.NotFoundException;
+import com.springboot.caseStudy.repositories.BalanceRepository;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service
 public class BalanceService {
-    @Autowired
+
+
     private BalanceRepository repo;
 
     public List<Balance> listAll() {
@@ -23,13 +23,12 @@ public class BalanceService {
 
 
 
-    public Balance get(Integer user_id) throws BalanceNotFoundException {
+    public Balance get(Integer user_id) throws NotFoundException {
         Optional<Balance> result = repo.findById(user_id);
         if (result.isPresent()){
             return result.get();
         }
-        throw new BalanceNotFoundException("Could not find accounts with ID"+ user_id);
-
+        throw new NotFoundException("Could not find accounts with ID"+ user_id);
     }
 
 }

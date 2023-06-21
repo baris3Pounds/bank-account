@@ -1,89 +1,65 @@
 package com.springboot.caseStudy.controllers;
 
 import com.springboot.caseStudy.account.Account;
-import com.springboot.caseStudy.account.AccountNotFoundException;
-import com.springboot.caseStudy.account.AccountServiceImpl;
-import com.springboot.caseStudy.account.Balance;
-import com.springboot.caseStudy.balance.BalanceNotFoundException;
 import com.springboot.caseStudy.balance.BalanceService;
+import com.springboot.caseStudy.dto.Deposit;
+import com.springboot.caseStudy.dto.Withdraw;
+import com.springboot.caseStudy.exceptions.NotFoundException;
 import com.springboot.caseStudy.repositories.BalanceRepository;
-import jakarta.servlet.http.HttpSession;
-import jakarta.websocket.server.PathParam;
-import org.aspectj.bridge.MessageUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.springboot.caseStudy.service.AccountService;
+import com.springboot.caseStudy.util.GenericResponse;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static java.lang.Integer.parseInt;
-
-@Controller
+@RestController
 public class BalanceController {
-    @Autowired
-    private AccountServiceImpl service2;
-    @Autowired
-    private BalanceService service;
-
+    private final AccountService accountService;
+    private final BalanceService balanceService;
     private final BalanceRepository balanceRepository;
 
-    public BalanceController(BalanceRepository balanceRepository) {
+    public BalanceController(AccountService accountService, BalanceService balanceService,
+        BalanceRepository balanceRepository) {
+        this.accountService = accountService;
+        this.balanceService = balanceService;
         this.balanceRepository = balanceRepository;
     }
 
 
     @GetMapping("/account/balance/{user_id}")
-    public String showEditForm(@PathVariable("user_id") Integer user_id, Model model, Model model2) {
+    public GenericResponse<Account> showEditForm(@PathVariable("user_id") Integer userId) {
         try {
-            Account account = service2.get(user_id);
-            Balance balance = service.get(user_id);
-            model.addAttribute("account", account);
-            model2.addAttribute("balance", balance);
-            model.addAttribute("pageTitle", "Edit Balance(ID: " + user_id + ")");
-            return "balance_deposit";
-        } catch (AccountNotFoundException e) {
-            return "redirect:/balances";
-        } catch (BalanceNotFoundException e) {
-            return "redirect:/balances";
+            Account account = accountService.get(userId);
+            return new GenericResponse<>("success",account);
+        } catch (NotFoundException e) {
+            return new GenericResponse<>(e.getMessage(),null);
         }
     }
 
 
-    @RequestMapping(value = "/account/deposit/{user_id}", method = RequestMethod.POST)
-    public String depositBalance(@PathVariable("user_id") Integer user_id, Model model) {
+    @PostMapping(value = "/account/deposit/{user_id}")
+    public GenericResponse<Account> depositBalance(@RequestBody Deposit deposit) {
         try {
-            Balance balance = service.get(user_id);
-            service.save(balance);
-            model.addAttribute("balance", balance);
-            model.addAttribute("pageTitle", "Edit Balance(ID: " + user_id + ")");
-            return "depositMoney";
-        } catch (BalanceNotFoundException e) {
-            return "redirect:/accounts";
+            Account account = accountService.get(deposit.getUserId());
+            account.getBalance().setBakiye(deposit.getBalance());
+            Account updateAccount = accountService.save(account);
+            return new GenericResponse("success",updateAccount);
+        } catch (NotFoundException e) {
+            return new GenericResponse<>(e.getMessage(),null);
         }
     }
 
     @RequestMapping(value = "/account/withdraw/{user_id}", method = RequestMethod.POST)
-    public String withdrawBalance(@PathVariable("user_id") Integer user_id, Model model) {
+    public GenericResponse withdrawBalance(Withdraw withdraw) {
         try {
-            Account account = service2.get(user_id);
-            Balance balance = service.get(user_id);
-            model.addAttribute("balance", balance);
-            model.addAttribute("pageTitle", "Edit Balance(ID: " + user_id + ")");
-            service.save(balance);
-            return "withdrawMoney";
-        } catch (AccountNotFoundException e) {
-            return "redirect:/balances";
-        } catch (BalanceNotFoundException e) {
-            return "redirect:/balances";
+            Account account = accountService.withdraw(withdraw);
+            return new GenericResponse("success",account);
+        } catch (NotFoundException e) {
+            return new GenericResponse<>(e.getMessage(),null);
         }
     }
 
