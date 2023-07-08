@@ -10,24 +10,11 @@ import java.util.Objects;
 public class Balance {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "account_seq")
-    private Integer user_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "balance_seq")
+    private Integer id;
     @Column(length = 20, nullable=false)
     private BigDecimal bakiye;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    @MapsId
-    private Account account;
-
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
 
     public Balance(BigDecimal bakiye) {
         this.bakiye = bakiye;
@@ -39,11 +26,11 @@ public class Balance {
 
 
     public Integer getUser_id() {
-        return user_id;
+        return id;
     }
 
-    public Balance setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public Balance setUser_id(Integer id) {
+        this.id = id;
         return null;
     }
 
@@ -58,7 +45,7 @@ public class Balance {
     @Override
     public String toString() {
         return "Balance{" +
-                "user_id=" + user_id +
+                "user_id=" + id +
                 ", bakiye=" + bakiye +
                 '}';
     }
@@ -70,12 +57,12 @@ public class Balance {
 
         Balance balance = (Balance) o;
 
-        return Objects.equals(user_id, balance.user_id);
+        return Objects.equals(id, balance.id);
     }
 
     @Override
     public int hashCode() {
-        return user_id != null ? user_id.hashCode() : 0;
+        return id != null ? id.hashCode() : 0;
     }
 
 }

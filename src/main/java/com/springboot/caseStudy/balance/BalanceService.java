@@ -13,12 +13,16 @@ public class BalanceService {
 
     private BalanceRepository repo;
 
+    public BalanceService(BalanceRepository repo) {
+        this.repo = repo;
+    }
+
     public List<Balance> listAll() {
         return (List<Balance>) repo.findAll();
     }
 
-    public void save(Balance balance) {
-        repo.save(balance);
+    public Balance save(Balance balance) {
+        return repo.save(balance);
     }
 
 

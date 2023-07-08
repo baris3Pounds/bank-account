@@ -8,6 +8,7 @@ import com.springboot.caseStudy.util.GenericResponse;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,17 +26,17 @@ public class AccountController {
 
     @RequestMapping("/accounts")
     public GenericResponse<List<Account>> getAccounts(){
-        return new GenericResponse<>("success",accountService.list());
+        List<Account> list = accountService.list();
+        return new GenericResponse<>("success", list);
     }
 
 
     @PostMapping(value = "/account/create")
-    public GenericResponse<Account> saveAccount(Account account){
+    public GenericResponse<Account> saveAccount(@RequestBody Account account){
+        Balance balance = account.getBalance();
+        Balance savedBalance = balanceService.save(balance);
+        account.setBalance(savedBalance);
         Account savedAccount = accountService.save(account);
-        Balance balance=new Balance(BigDecimal.ZERO);
-        balance.setAccount(account);
-        account.setBalance(balance);
-        balanceService.save(balance);
         return new GenericResponse<>("success",savedAccount);
     }
 

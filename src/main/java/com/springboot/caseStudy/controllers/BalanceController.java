@@ -1,11 +1,9 @@
 package com.springboot.caseStudy.controllers;
 
 import com.springboot.caseStudy.account.Account;
-import com.springboot.caseStudy.balance.BalanceService;
 import com.springboot.caseStudy.dto.Deposit;
 import com.springboot.caseStudy.dto.Withdraw;
 import com.springboot.caseStudy.exceptions.NotFoundException;
-import com.springboot.caseStudy.repositories.BalanceRepository;
 import com.springboot.caseStudy.service.AccountService;
 import com.springboot.caseStudy.util.GenericResponse;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,14 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class BalanceController {
     private final AccountService accountService;
-    private final BalanceService balanceService;
-    private final BalanceRepository balanceRepository;
 
-    public BalanceController(AccountService accountService, BalanceService balanceService,
-        BalanceRepository balanceRepository) {
+    public BalanceController(AccountService accountService) {
         this.accountService = accountService;
-        this.balanceService = balanceService;
-        this.balanceRepository = balanceRepository;
     }
 
 
@@ -45,7 +38,7 @@ public class BalanceController {
     public GenericResponse<Account> depositBalance(@RequestBody Deposit deposit) {
         try {
             Account account = accountService.get(deposit.getUserId());
-            account.getBalance().setBakiye(deposit.getBalance());
+            account.getBalance().setBakiye(account.getBalance().getBakiye().add(deposit.getBalance()));
             Account updateAccount = accountService.save(account);
             return new GenericResponse("success",updateAccount);
         } catch (NotFoundException e) {
@@ -54,7 +47,7 @@ public class BalanceController {
     }
 
     @RequestMapping(value = "/account/withdraw/{user_id}", method = RequestMethod.POST)
-    public GenericResponse withdrawBalance(Withdraw withdraw) {
+    public GenericResponse withdrawBalance(@RequestBody Withdraw withdraw) {
         try {
             Account account = accountService.withdraw(withdraw);
             return new GenericResponse("success",account);

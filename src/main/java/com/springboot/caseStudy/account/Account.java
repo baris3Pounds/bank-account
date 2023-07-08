@@ -22,8 +22,8 @@ public class Account {
   private String email;
 
 
-  @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
-  @PrimaryKeyJoinColumn
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "balance_id", referencedColumnName = "id")
   private Balance balance;
 
   public Balance getBalance() {
