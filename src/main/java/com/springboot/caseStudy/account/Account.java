@@ -11,7 +11,7 @@ public class Account {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "balance_seq")
-  private Integer user_id;
+  private Integer userId;
   @Column(length = 20, nullable = false)
   private String name;
   @Column(length = 20, nullable = false)
@@ -59,11 +59,11 @@ public class Account {
   }
 
   public Integer getUserId() {
-    return user_id;
+    return userId;
   }
 
   public void setUserId(Integer userId) {
-    this.user_id = user_id;
+    this.userId = this.userId;
   }
 
   public String getName() {
@@ -101,7 +101,7 @@ public class Account {
   @Override
   public String toString() {
     return "Account{" +
-        "id=" + user_id +
+        "id=" + userId +
         ", name='" + name + '\'' +
         ", surname='" + surname + '\'' +
         ", telephone='" + telephone + '\'' +
@@ -120,12 +120,12 @@ public class Account {
 
     Account account = (Account) o;
 
-    return Objects.equals(user_id, account.user_id);
+    return Objects.equals(userId, account.userId);
   }
 
   @Override
   public int hashCode() {
-    return user_id != null ? user_id.hashCode() : 0;
+    return userId != null ? userId.hashCode() : 0;
   }
 
 }
