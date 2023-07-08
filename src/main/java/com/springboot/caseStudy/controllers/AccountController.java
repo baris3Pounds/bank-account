@@ -5,7 +5,6 @@ import com.springboot.caseStudy.account.Balance;
 import com.springboot.caseStudy.balance.BalanceService;
 import com.springboot.caseStudy.service.AccountService;
 import com.springboot.caseStudy.util.GenericResponse;
-import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

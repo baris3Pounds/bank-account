@@ -21,6 +21,10 @@ public class Account {
   @Column
   private String email;
 
+  @Column
+  @Enumerated(EnumType.STRING)
+  private CurrencyType currencyType;
+
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "balance_id", referencedColumnName = "id")
@@ -42,11 +46,12 @@ public class Account {
     this.email = email;
   }
 
-  public Account(String name, String surname, String telephone, String email) {
+  public Account(String name, String surname, String telephone, String email, CurrencyType currencyType) {
     this.name = name;
     this.surname = surname;
     this.telephone = telephone;
     this.email = email;
+    this.currencyType = currencyType;
   }
 
   public Account() {
@@ -83,6 +88,14 @@ public class Account {
 
   public void setTelephone(String telephone) {
     this.telephone = telephone;
+  }
+
+  public CurrencyType getCurrencyType() {
+    return currencyType;
+  }
+
+  public void setCurrencyType(CurrencyType currencyType) {
+    this.currencyType = currencyType;
   }
 
   @Override
