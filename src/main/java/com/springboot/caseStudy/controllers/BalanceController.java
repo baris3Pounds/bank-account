@@ -56,6 +56,39 @@ public class BalanceController {
         }
     }
 
+    @PostMapping(value = "/account/transfer")
+    public GenericResponse<List<Account>> transferBalance(@RequestBody Transfer transfer) {
+        try {
+            Account account1 = accountService.get(transfer.getFromId());
+            Account account2 = accountService.get(transfer.getToId());
+            BigDecimal acc1=account1.getBalance().getBakiye();
+            BigDecimal acc2=account2.getBalance().getBakiye();
+            int fromAccBakiye=acc1.intValue();
+            int toAccBakiye=acc2.intValue();
+            if (account1.getCurrencyType().equals(account2.getCurrencyType()) ){
+                if (fromAccBakiye >= toAccBakiye){
+                    account1.getBalance().setBakiye(account1.getBalance().getBakiye().subtract(transfer.getAmountToTransfer()));
+                    account2.getBalance().setBakiye(account2.getBalance().getBakiye().add(transfer.getAmountToTransfer()));
+                }
+                else if (fromAccBakiye < toAccBakiye){
+                    System.out.println("Yeterli Bakiyeniz Bulunmamaktadır");
+                }
+
+            }
+            else {
+                System.out.println("Hesapların Para Birimi Farklıdır.");
+            }
+            //account1.getBalance().setBakiye(account1.getBalance().getBakiye().subtract(transfer.getAmountToTransfer()));
+            //account2.getBalance().setBakiye(account2.getBalance().getBakiye().add(transfer.getAmountToTransfer()));
+            Account updateAccount1 = accountService.save(account1);
+            Account updateAccount2 = accountService.save(account2);
+            List<Account> list=accountService.list();
+            return new GenericResponse("success",list);
+        } catch (NotFoundException e) {
+            return new GenericResponse<>(e.getMessage(),null);
+        }
+    }
+
 }
 
 
